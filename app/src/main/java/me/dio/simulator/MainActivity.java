@@ -1,8 +1,10 @@
 package me.dio.simulator;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import me.dio.simulator.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
