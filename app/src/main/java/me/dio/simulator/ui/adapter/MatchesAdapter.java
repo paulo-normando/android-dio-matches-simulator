@@ -37,7 +37,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.ViewHold
         Match match = matches.get(position);
 
         //Adapta os dados da partida recuperada da api para o nosso layout.
-        Glide.with(context).load(match.getHomeTeam().getImage()).into(holder.binding.ivHomeTeam);
+        Glide.with(context).load(match.getHomeTeam().getImage()).circleCrop().into(holder.binding.ivHomeTeam);
         holder.binding.tvHomeTeamName.setText(match.getHomeTeam().getName());
         Glide.with(context).load(match.getAwayTeam().getImage()).into(holder.binding.ivAwayTeam);
         holder.binding.tvAwayTeamName.setText(match.getAwayTeam().getName());

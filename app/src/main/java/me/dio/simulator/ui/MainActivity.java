@@ -1,5 +1,7 @@
 package me.dio.simulator.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -52,16 +54,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupFloatingActionButton() {
-    //TODO
+        binding.fabSimulate.setOnClickListener(view -> {
+            view.animate().rotationBy(360).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    //TODO Implementar o algoritmo
+                }
+            });
+        });
     }
 
     private void setupMatchesRefresh() {
-        //TODO
+        binding.srlMatches.setOnRefreshListener(this::findMatchesFromApi);
     }
 
     private void setupMatchesList() {
         binding.rvMatches.setHasFixedSize(true);
         binding.rvMatches.setLayoutManager(new LinearLayoutManager(this));
+        findMatchesFromApi();
+    }
+
+    private void findMatchesFromApi() {
+        binding.srlMatches.setRefreshing(true);
         matchesApi.getMatches().enqueue(new Callback<List<Match>>() {
         @Override
         public void onResponse(Call<List<Match>> call, Response<List<Match>> response) {
@@ -72,11 +87,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 showErrorMessages();
             }
+            binding.srlMatches.setRefreshing(false);
         }
 
         @Override
         public void onFailure(Call<List<Match>> call, Throwable t) {
             showErrorMessages();
+            binding.srlMatches.setRefreshing(false);
         }
     });
     }
