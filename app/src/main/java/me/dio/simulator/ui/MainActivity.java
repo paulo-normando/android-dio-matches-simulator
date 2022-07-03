@@ -1,4 +1,4 @@
-package me.dio.simulator;
+package me.dio.simulator.ui;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -15,5 +15,21 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setupMatchesList();
+        setupMatchesRefresh();
+        setupFloatingActionButton();
+    }
+
+    private void setupFloatingActionButton() {
+    //TODO
+    }
+
+    private void setupMatchesRefresh() {
+        //TODO
+    }
+
+    private void setupMatchesList() {
+    //TODO
     }
 }
