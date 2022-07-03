@@ -54,5 +54,4 @@ public class Place implements Parcelable {
     public void setImage(String image) {
         this.image = image;
     }
-
 }

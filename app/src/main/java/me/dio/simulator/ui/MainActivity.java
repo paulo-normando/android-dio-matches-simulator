@@ -3,7 +3,6 @@ package me.dio.simulator.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setupHttpClient();
-
         setupMatchesList();
         setupMatchesRefresh();
         setupFloatingActionButton();
@@ -48,10 +46,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupHttpClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://paulo-normando.github.io/android-dio-matches-simulator-api/matches.json")
+                .baseUrl("https://digitalinnovationone.github.io/matches-simulator-api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         matchesApi = retrofit.create(MatchesApi.class);
+    }
+
+    private void setupMatchesList() {
+        binding.rvMatches.setHasFixedSize(true);
+        binding.rvMatches.setLayoutManager(new LinearLayoutManager(this));
+        findMatchesFromApi();
+    }
+
+    private void setupMatchesRefresh() {
+        binding.srlMatches.setOnRefreshListener(this::findMatchesFromApi);
     }
 
     private void setupFloatingActionButton() {
@@ -71,40 +80,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupMatchesRefresh() {
-        binding.srlMatches.setOnRefreshListener(this::findMatchesFromApi);
-    }
-
-    private void setupMatchesList() {
-        binding.rvMatches.setHasFixedSize(true);
-        binding.rvMatches.setLayoutManager(new LinearLayoutManager(this));
-        findMatchesFromApi();
-    }
-
     private void findMatchesFromApi() {
         binding.srlMatches.setRefreshing(true);
         matchesApi.getMatches().enqueue(new Callback<List<Match>>() {
-        @Override
-        public void onResponse(Call<List<Match>> call, Response<List<Match>> response) {
-            if (response.isSuccessful()) {
-                List<Match> matches = response.body();
-                matchesAdapter = new MatchesAdapter(matches);
-                binding.rvMatches.setAdapter(matchesAdapter);
-            } else {
-                showErrorMessages();
+            @Override
+            public void onResponse(Call<List<Match>> call, Response<List<Match>> response) {
+                if (response.isSuccessful()) {
+                    List<Match> matches = response.body();
+                    matchesAdapter = new MatchesAdapter(matches);
+                    binding.rvMatches.setAdapter(matchesAdapter);
+                } else {
+                    showErrorMessage();
+                }
+                binding.srlMatches.setRefreshing(false);
             }
-            binding.srlMatches.setRefreshing(false);
-        }
 
-        @Override
-        public void onFailure(Call<List<Match>> call, Throwable t) {
-            showErrorMessages();
-            binding.srlMatches.setRefreshing(false);
-        }
-    });
+            @Override
+            public void onFailure(Call<List<Match>> call, Throwable t) {
+                showErrorMessage();
+                binding.srlMatches.setRefreshing(false);
+            }
+        });
     }
 
-    private void showErrorMessages() {
+    private void showErrorMessage() {
         Snackbar.make(binding.fabSimulate, R.string.error_api, Snackbar.LENGTH_LONG).show();
     }
 }

@@ -1,6 +1,5 @@
 package me.dio.simulator.data;
 
-import java.nio.channels.GatheringByteChannel;
 import java.util.List;
 
 import me.dio.simulator.domain.Match;
@@ -11,5 +10,4 @@ public interface MatchesApi {
 
     @GET("matches.json")
     Call<List<Match>> getMatches();
-
 }
