@@ -7,9 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.DetailActivity">
 
-    <!-- Adding an image to the prominent top app bar:
-         Reference: https://material.io/components/app-bars-top/android#regular-top-app-bar -->
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
